@@ -1,7 +1,5 @@
 package loader;
 
-import checker.LinkChecker;
-import controller.CrawlerController;
 import entity.Curl;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.CookieSpecs;
@@ -11,25 +9,23 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import util.ResponseUtils;
-import writer.PageWriter;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 /**
  * Created by 林志杰 on 2017/3/26.
  */
-public class PageLoader implements Runnable{
-    Curl curl;
-    CrawlerController crawlerController;
+public class PageLoader{
+//    Curl curl;
+//    CrawlerController crawlerController;
 
-    public PageLoader(Curl curl, CrawlerController crawlerController) {
-        this.curl = curl;
-        this.crawlerController = crawlerController;
-    }
+//    public PageLoader(Curl curl, CrawlerController crawlerController) {
+//        this.curl = curl;
+//        this.crawlerController = crawlerController;
+//    }
 
-    private void load(Curl curl){
+    public void load(Curl curl){
         String html = "";
         //httpclient配置
         RequestConfig config = RequestConfig.custom()
@@ -70,25 +66,32 @@ public class PageLoader implements Runnable{
                 }
             }
         }
+        //测试
         curl.setPage(html);
+        if(curl.getType()==0){
+            System.out.println("列表页");
+        }else{
+            System.out.println("详情页");
+        }
     }
 
-    @Override
-    public void run() {
-        //下载页面
-        load(curl);
-        //若是列表页链接，就从中提取详情页链接
-        if(curl.getType() == 0){
-            List<Curl> curlList = crawlerController.getLinkExtractor().extract(curl);
-            for(Curl curl : curlList){
-                new PageLoader(curl,crawlerController);
-            }
-        }
-        //如是详情链接且未曾下载，就提取文本，写入文件
-        if(curl.getType() == 1&&LinkChecker.accept(curl.getLink())){
-            crawlerController.getTextExtractor().extract(curl);
-            new Thread(new PageWriter(crawlerController,curl)).start();
-        }
-
-    }
+//    @Override
+//    public void run() {
+//        System.out.print("pageloader\n");
+//        //下载页面
+//        load(curl);
+//        //若是列表页链接，就从中提   取详情页链接
+//        if(curl.getType() == 0){
+//            List<Curl> curlList = crawlerController.getLinkExtractor().extract(curl);
+//            for(Curl curl : curlList){
+//                new PageLoader(curl,crawlerController);
+//            }
+//        }
+//        //如是详情链接且未曾下载，就提取文本，写入文件
+//        if(curl.getType() == 1){
+//            crawlerController.getTextExtractor().extract(curl);
+//            new Thread(new PageWriter(crawlerController,curl)).start();
+//        }
+//
+//    }
 }
