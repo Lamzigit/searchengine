@@ -1,6 +1,7 @@
 package producer;
 
 import entity.Curl;
+import frontier.TodoFrontier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,9 @@ import java.util.List;
  */
 public abstract class  UrlProducer {
 
-    protected List<Curl> curls = new ArrayList<>();
+    private List<Curl> curls = new ArrayList<>();
 
-    public List<Curl> getUrls(){
+    protected List<Curl> getUrls(){
         return curls;
     }
 
@@ -20,6 +21,6 @@ public abstract class  UrlProducer {
         curls.add(curl);
     }
 
-    public abstract List<Curl> produce();
+    public abstract void produce(TodoFrontier todoFrontier);
 
 }
