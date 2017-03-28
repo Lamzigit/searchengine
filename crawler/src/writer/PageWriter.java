@@ -9,7 +9,7 @@ import java.io.*;
 /**
  * Created by 林志杰 on 2017/3/26.
  */
-public class PageWriter implements Runnable{
+public class PageWriter{
     CrawlerController crawlerController;
     Curl curl;
 
@@ -18,13 +18,17 @@ public class PageWriter implements Runnable{
         this.curl = curl;
     }
 
-    public void run(){
+    public void write(){
         //以公司域名作为分类文件夹
         String path = curl.getLink().substring(curl.getLink().indexOf("http://")+7,curl.getLink().indexOf(".com")+4);
-        path = crawlerController.getPath() + "\\" + path;
+        path = crawlerController.getPath() + "/" + path;
+        File dir = new File(path);
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
         //获取页面标题作为文件名
         String title = curl.getPage().substring(curl.getPage().indexOf("title=")+6,curl.getPage().indexOf("company"));
-        String completepath = path + "\\" + StringUtils.formatTitle(title)+".txt";
+        String completepath = path + "/" + StringUtils.formatTitle(title)+".txt";
         File file = new File(completepath);
         System.out.println("正在写入："+completepath);
         //System.out.println("已写入文件数："+haswritefile);
