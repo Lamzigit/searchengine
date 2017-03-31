@@ -2,7 +2,6 @@ package extractor;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import test.ZhilianTest;
 import util.StringUtils;
 
 /**
@@ -18,6 +17,7 @@ public class ZhilianTextExtractor extends TextExtractor {
     protected String getTitle() {
         String title =htmldoc.select("title").get(0).text();
         title = StringUtils.formatTitle(title);
+        title = title.substring(0,title.indexOf("-"));
         return title;
     }
 
