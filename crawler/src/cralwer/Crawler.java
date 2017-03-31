@@ -20,7 +20,14 @@ public class Crawler implements Runnable{
     public void run() {
         synchronized (this){
             controller.threadnum++;
-            System.out.println("当前线程数为："+controller.threadnum);
+            System.out.println("=========当前线程数为："+controller.threadnum);
+        }
+        try {
+            if(controller.threadnum>170){
+                Thread.sleep(3000);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         TodoFrontier todoFrontier = controller.getTodoFrontier();
         if(todoFrontier.isEmpty()){
@@ -33,7 +40,7 @@ public class Crawler implements Runnable{
         curl = todoFrontier.getCurl();
         //curl若不为空则抓取
         if(curl != null){
-            System.out.println("开始线程");
+            System.out.println("=====开始线程");
             //下载页面
             new PageLoader().load(curl);
             //type是0为列表页，1为详情页
@@ -45,7 +52,7 @@ public class Crawler implements Runnable{
             //else if(curl.getType()==1 && controller.getVistedFrontier().accept(curl)){
             if(curl.getType()==1){
                 controller.getTextExtractor().extract(curl);
-                new PageWriter(controller,curl).write();
+                new Thread(new PageWriter(controller,curl)).start();
             }
             synchronized (this){
                 controller.threadnum--;
