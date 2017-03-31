@@ -5,11 +5,13 @@ import entity.Curl;
 import util.StringUtils;
 
 import java.io.*;
+import java.util.Calendar;
+
 
 /**
  * Created by 林志杰 on 2017/3/26.
  */
-public class PageWriter{
+public class PageWriter implements Runnable{
     CrawlerController crawlerController;
     Curl curl;
 
@@ -18,10 +20,23 @@ public class PageWriter{
         this.curl = curl;
     }
 
-    public void write(){
+    public void run(){
+        //txt文件夹路径
+        String path = crawlerController.getPath();
+        //用日期标识新爬取的文件夹
+        Calendar calendar = Calendar.getInstance();
+        //格式化月份
+        int mon = calendar.get(Calendar.MONTH)+1;
+        String month = mon>9?String.valueOf(mon):"0"+String.valueOf(mon);
+        //格式化日号
+        int dat = calendar.get(Calendar.DATE);
+        String date = dat>9?String.valueOf(dat):"0"+String.valueOf(dat);
+        //拼接日期字符串
+        String datestr = String.valueOf(calendar.get(Calendar.YEAR))+month+date;
         //以公司域名作为分类文件夹
-        String path = curl.getLink().substring(curl.getLink().indexOf("http://")+7,curl.getLink().indexOf(".com")+4);
-        path = crawlerController.getPath() + "/" + path;
+        String compstr = curl.getLink().substring(curl.getLink().indexOf("http://")+7,curl.getLink().indexOf(".com")+4);
+        //最终文件夹路径
+        path = path + "/"+ datestr + "/"+compstr;
         File dir = new File(path);
         if(!dir.exists()){
             dir.mkdirs();
@@ -31,13 +46,13 @@ public class PageWriter{
         String completepath = path + "/" + StringUtils.formatTitle(title)+".txt";
         File file = new File(completepath);
         System.out.println("正在写入："+completepath);
-        //System.out.println("已写入文件数："+haswritefile);
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(file);
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
             outputStreamWriter.write(curl.getPage());
             outputStreamWriter.close();
+            crawlerController.getVistedFrontier().addUrl(curl);
         } catch (FileNotFoundException e) {
             System.out.println("in loader writeFile   title:" + title);
             e.printStackTrace();
