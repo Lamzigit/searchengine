@@ -1,0 +1,13 @@
+UrlProducer
+    列表页链接生成器：每个招聘网站对应一个专属生成器类，如；ZhilianUrlProducer
+LinkExtractor
+    详情页链接提取器：每个招聘网站对应一个专属详情页链接提取器类，如；ZhilianLinkExtrator
+TextExtractor
+    文本提取器：每个招聘网站对应一个专属文本提取器类，如；ZhilianTextExtrator
+CrawlerController
+    爬虫控制器：每个网站的全部爬取工作由一个爬虫控制器实例负责。内部循环调用Crawler类来完程每个链接的抓取。
+    参数path是指向txt文件的存储位置。要注意路径问题：当在ide中测试时，根据项目结构看，路径为“web/resource/txt”。而实际部署时，
+    下载的txt文件时存储在web项目根目录下的txt文件夹，但此模块的字节码文件运行时classpath是指向Tomcat的bin目录。因此，此时的路径
+    为“../webapps/<项目名称>/txt”
+Crawler
+    爬虫类：每一个链接对象Curl由一个爬虫实例负责抓取。
