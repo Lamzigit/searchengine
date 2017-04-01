@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="recruitment")
-public class Employ implements Serializable {
+public class Employ implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
