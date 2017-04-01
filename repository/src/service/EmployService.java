@@ -1,5 +1,6 @@
 package service;
 
+import dao.CacheDacoImp;
 import dao.EmployDaoImp;
 import entity.Employ;
 import util.EmployHelper;
@@ -12,7 +13,7 @@ import java.util.Date;
  */
 public class EmployService {
     private EmployDaoImp emdao = new EmployDaoImp();
-
+    private CacheDacoImp cadao = new CacheDacoImp();
     public Employ save(File file){
         Employ employ = EmployHelper.getemploy(file);
         if(emdao.save(employ)>0){
@@ -41,4 +42,17 @@ public class EmployService {
         Date date = new Date();
     }
 
+    public Employ getEmployById(int id){
+        Employ employ = cadao.get(id);
+        if(employ == null){
+            employ = emdao.getEmployById(id);
+            //if(){
+                cadao.add(employ);
+            //}
+            System.out.println("===================首次加载");
+        }else {
+            System.out.println("===================缓存加载");
+        }
+        return employ;
+    }
 }
