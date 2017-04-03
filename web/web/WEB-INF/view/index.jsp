@@ -53,6 +53,7 @@
         <form name="searchform" action="/searchengine/search">
           <p class="lead">
             <input class="form-control" name="term" type="text" id="formGroupInputLarge" placeholder="输入公司名称或职位">
+            <input name="page_no" type="hidden" value="1">
           </p>
           <p class="lead">
             <input href="" type="submit" class="btn btn-lg btn-default" value="搜索"></input>
