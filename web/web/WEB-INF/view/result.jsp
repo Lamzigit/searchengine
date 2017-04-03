@@ -28,6 +28,7 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <input type="text" class="form-control" name="term" id="search-form" value="${term}">
+                        <input name="page_no" type="hidden" value="1">
                         <span class="input-group-btn">
                             <input href="" type="submit" class="btn btn-default" value="搜索"></input>
                         </span>
